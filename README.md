@@ -1,5 +1,7 @@
+
 # Mines (Minesweeper Clone)
 Minesweeper is a logic puzzle video game genre generally played on personal computers. The game features a grid of clickable tiles, with hidden mines dispersed throughout the board. The objective is to clear the board without detonating any mines, with help from clues about the number of neighboring mines in each field. 
+
 
 ## Game
 * Player is greeted with a welcome title and game name.
@@ -72,3 +74,5 @@ winner = false;
 loser = false;
 timer = null;
 ```
+
+![Mine](./assets/Mine.png)
