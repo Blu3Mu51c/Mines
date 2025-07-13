@@ -1,5 +1,6 @@
 const gridElement = document.querySelector('.grid');
 const flagsLeftElement = document.querySelector('#flagLeft');
+const flagTextElement = document.querySelector('.flagText');
 
 
 let gridSize = 9;
@@ -12,10 +13,14 @@ const tileStatus = {
     marked:'marked',
 }
 
+
 //Creating Grid
+
+
 function createGrid(gridSize, numberOfMines){
   const grid = [];
-const minePositions = getMinePositions(gridSize,numberOfMines);
+  const minePositions = getMinePositions(gridSize,numberOfMines);
+
   for(let rows=0; rows<gridSize; rows++){
     const row =[];
     for(let cols=0; cols<gridSize; cols++){
@@ -43,6 +48,9 @@ const minePositions = getMinePositions(gridSize,numberOfMines);
 }
 
 
+//Mine Positioning
+
+
 function getMinePositions(gridSize,numberOfMines){
   const locations = []; //locations of the mines in array x,y
 
@@ -63,12 +71,16 @@ function getMinePositions(gridSize,numberOfMines){
 function random(size){
   return Math.floor(Math.random()*size)
 }
+
 //utility function that matches coordinates
 function mineMatch(x,y){
 return x.rows === y.rows && x.cols === y.cols
 }
 
+
 //Flagging & Flag Counting functions
+
+
 //if tile is not marked and hidden mark it and if it is marked then unmark
 function flagged(tiles){
   if (tiles.status !== tileStatus.hidden && tiles.status !==tileStatus.marked){
@@ -83,6 +95,7 @@ function flagged(tiles){
     tiles.individualTile.textContent = 'O';
   }
 }
+
 //decrements flagscount by 1 or increments by 1 depending on removal or addition
 function flagCount(){
   const flaggedTiles = grid.reduce((count,row)=>{
@@ -127,6 +140,9 @@ function surroundingTiles(grid,{rows,cols}){
   return surrounding;
 }
 
+
+//Win and Lose conditions and functions
+
 function checkWin(grid){
 return grid.every(row=>{
   return row.every(tiles=>{
@@ -143,14 +159,45 @@ return grid.some(row=>{
 })
 }
 
+function gameStatus(){
+  const win = checkWin(grid);
+  const lose = checkLose(grid);
+
+  if (win||lose){
+    gridElement.addEventListener('click', stopProp, {capture :true})
+    gridElement.addEventListener('contextmenu', stopProp, {capture :true})
+  }
+
+  if (win){
+    flagTextElement.textContent = 'You Win'
+  }
+   if (lose){
+    flagTextElement.textContent = 'You lose'
+    grid.forEach(row=>{
+      row.forEach(tiles=>{
+        if(tiles.status === tileStatus.marked) flagged(tiles);
+        if(tiles.mine) reveal(grid,tiles)
+      })
+    })
+  }
+}
+
+
+function stopProp(e){
+  e.stopImmediatePropagation()
+}
+
 
 //Rendering the grid
+
+
 const grid = createGrid(gridSize,numberOfMines);
 grid.forEach(row=>{
   row.forEach(tiles=>{
     gridElement.append(tiles.individualTile);
-      tiles.individualTile.addEventListener('click', ()=>{
-        reveal(grid, tiles);
+    tiles.individualTile.addEventListener('click', ()=>{
+      reveal(grid, tiles);
+      gameStatus();
     })
     tiles.individualTile.addEventListener('contextmenu',e =>{
       e.preventDefault();
