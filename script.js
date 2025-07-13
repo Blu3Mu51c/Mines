@@ -127,7 +127,21 @@ function surroundingTiles(grid,{rows,cols}){
   return surrounding;
 }
 
+function checkWin(grid){
+return grid.every(row=>{
+  return row.every(tiles=>{
+    return tiles.status === tileStatus.number || (tiles.mine && (tiles.status===tileStatus.hidden || tiles.status === tileStatus.marked))
+  })
+})
+}
 
+function checkLose(grid){
+return grid.some(row=>{
+  return row.some(tiles=>{
+    return tiles.status === tileStatus.mine;
+})
+})
+}
 
 
 //Rendering the grid
