@@ -1,60 +1,56 @@
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
+}
+body {
+    margin: 0;
+    background-color: bisque;
+    display: flex;
+    align-items: center;
+    font-size: 3rem;
+    flex-direction: column;
+    color: white;
 }
 
-body {
-  margin: 0;
-  background-color: #333;
-  display: flex;
-  align-items: center;
-  font-size: 3rem;
-  flex-direction: column;
-  color: white;
-}
 h2{
     margin:0px;
-    color:rgb(0, 0, 0);
+    color:rgb(193, 114, 17);
     text-align: center;
 }
+
 .flagText {
-  color: #CCC;
-  font-size: 1.5rem;
-  margin-bottom: 10px;
+    color: black;
+    font-size: 1.5rem;
+    margin-bottom: 10px;
 }
-
 .grid {
-  display: inline-grid;
-  padding: 10px;
-  gap: 4px;
-  background-color: #777;
-  grid-template-columns: repeat(var(--gs), 60px);
-  grid-template-rows: repeat(var(--gs), 60px);
+    display: inline-grid;
+    padding: 10px;
+    gap: 6px;
+    border-radius: 5%;
+    background-color: rgb(255, 153, 29);
+    grid-template-columns: repeat(var(--gs), 60px);
+    grid-template-rows: repeat(var(--gs), 60px);
 }
-    
 .grid > * {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: black;
-  border: 2px solid #BBB;
-  user-select: none;
+    border-radius: 15%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+    user-select: none;
 }
-
 .grid > [data-status="hidden"] {
-  background-color: #BBB;
-  cursor: pointer;
+    background-color: rgb(193, 114, 17);
+    cursor: pointer;
 }
-
 .grid > [data-status="mine"] {
-  background-color: red;
+    background-color: rgb(255, 128, 128);
 }
-
 .grid > [data-status="marked"] {
-  background-color: rgb(205, 255, 131);
+    background-color: rgb(174, 255, 158);
+}
+.grid > [data-status="number"] {
+    background-color: wheat;
 }
 
-.grid > [data-status="number"] {
-  background-color: none;
-}
+
