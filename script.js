@@ -92,6 +92,20 @@ function flagCount(){
 }
 
 
+//Revealing tile and check surrounding tiles function
+
+
+function reveal(grid, tiles){
+  if(tiles.status !== tileStatus.hidden){
+    return;
+  }
+  if (tiles.mine){
+    tiles.status = tileStatus.mine;
+    tiles.individualTile.textContent = 'X'
+    return;
+  }
+  else
+  tiles.status = tileStatus.number;}
 
 
 
@@ -104,7 +118,7 @@ grid.forEach(row=>{
   row.forEach(tiles=>{
     gridElement.append(tiles.individualTile);
       tiles.individualTile.addEventListener('click', ()=>{
-
+        reveal(grid, tiles);
     })
     tiles.individualTile.addEventListener('contextmenu',e =>{
       e.preventDefault();
