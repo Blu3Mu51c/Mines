@@ -1,13 +1,13 @@
-const gridElement = document.querySelector('.grid')
-const flagsLeftElement = document.querySelector('#flagLeft')
-const flagTextElement = document.querySelector('.flagText')
-const timerElement = document.querySelector('.timer')
+const gridElement = document.querySelector('.grid');
+const flagsLeftElement = document.querySelector('#flagLeft');
+const flagTextElement = document.querySelector('.flagText');
+const inputElementGrid = document.getElementById('gridSize');
+const inputElementMine = document.getElementById('numberOfMines')
+const setGrid = document.getElementById('setGrid');
 
 
-let gridSize = 8;
-let numberOfMines = 6;
-let timer = 0;
-let timerInterval = null;
+let gridSize = 0;
+let numberOfMines = 0;
 
 const tileStatus = {
     hidden:'hidden',
@@ -16,19 +16,8 @@ const tileStatus = {
     marked:'marked',
 }
 
-//Ask user for grid size and amount of mines
 
-/*
-function userEnter() {
-  
-  let size = parseInt(prompt('Enter grid size (e.g. 9):'), 10);
-  let mine = parseInt(prompt('Enter number of mines (e.g. 10):'), 10); 
 
-  gridSize = size;
-  numberOfMines= mine;}
-
-userEnter();
-*/
 
 //Creating Grid
 
@@ -68,23 +57,27 @@ function createGrid(gridSize, numberOfMines){
 
 
 function getMinePositions(gridSize,numberOfMines){
-  const locations = [];
+  const locations = []; //locations of the mines in array x,y
+
   while(locations.length < numberOfMines){
-    const location = {
+    const location = {  //random coordinates for the mine
       rows:random(gridSize),
       cols:random(gridSize)
     }
+
     if (!locations.some(mineMatch.bind(null,location))){
-      locations.push(location);
+      locations.push(location); //check if mine exists on same coordinate if not then push
     }
   }
   return locations;
 }
 
+//utility funciton that makes random 
 function random(size){
   return Math.floor(Math.random()*size)
 }
 
+//utility function that matches coordinates
 function mineMatch(x,y){
 return x.rows === y.rows && x.cols === y.cols
 }
@@ -93,6 +86,7 @@ return x.rows === y.rows && x.cols === y.cols
 //Flagging & Flag Counting functions
 
 
+//if tile is not marked and hidden mark it and if it is marked then unmark
 function flagged(tiles){
   if (tiles.status !== tileStatus.hidden && tiles.status !==tileStatus.marked){
     return
@@ -107,6 +101,7 @@ function flagged(tiles){
   }
 }
 
+//decrements flagscount by 1 or increments by 1 depending on removal or addition
 function flagCount(){
   const flaggedTiles = grid.reduce((count,row)=>{
     return count + row.filter(tiles => tiles.status === tileStatus.marked).length
@@ -198,8 +193,26 @@ function stopProp(e){
 }
 
 
+
+
 //Rendering the grid
 
+
+
+
+
+//Ask user for grid size and amount of mines
+
+/*
+
+function newGrid() {
+  
+  gridNumber = parseInt(inputElementGrid.value);
+  mineNumber = parseInt(inputElementMine.value);
+
+  gridSize = gridNumber;
+  numberOfMines= mineNumber;
+  
 
 const grid = createGrid(gridSize,numberOfMines);
 grid.forEach(row=>{
@@ -219,7 +232,9 @@ grid.forEach(row=>{
 
 gridElement.style.setProperty('--gs', gridSize)
 flagsLeftElement.textContent = numberOfMines;
+}
 
 
+setGrid.addEventListener('click',newGrid)
 
-
+*/
