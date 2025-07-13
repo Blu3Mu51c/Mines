@@ -26,6 +26,7 @@ const minePositions = getMinePositions(gridSize,numberOfMines);
         individualTile,
         cols,
         rows,
+        mine: minePositions.some(mineMatch.bind(null,{ rows,cols })),
         get status(){
           return individualTile.dataset.status;
         },
@@ -50,14 +51,22 @@ function getMinePositions(gridSize,numberOfMines){
       rows:random(gridSize),
       cols:random(gridSize)
     }
+
+    if (!locations.some(mineMatch.bind(null,location))){
+      locations.push(location); //check if mine exists on same coordinate if not then push
+    }
   }
+  return locations;
 }
 
 //utility funciton that makes random 
 function random(size){
   return Math.floor(Math.random()*size)
 }
-
+//utility function that matches coordinates
+function mineMatch(x,y){
+return x.rows === y.rows && x.cols === y.cols
+}
 
 //Flagging & Flag Counting functions
 //if tile is not marked and hidden mark it and if it is marked then unmark
