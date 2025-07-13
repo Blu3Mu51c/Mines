@@ -1,61 +1,22 @@
+# Step 1 Making the Grid and printing it
+
+```
 const gridElement = document.querySelector('.grid')
-const flagsLeftElement = document.querySelector('#flagLeft')
-const flagTextElement = document.querySelector('.flagText')
-const timerElement = document.querySelector('.timer')
-
-
-let gridSize = 8;
-let numberOfMines = 6;
-let timer = 0;
-let timerInterval = null;
-
-const tileStatus = {
-    hidden:'hidden',
-    mine:'mine',
-    number:'number',
-    marked:'marked',
-}
-
-//Ask user for grid size and amount of mines
-
-/*
-function userEnter() {
-  
-  let size = parseInt(prompt('Enter grid size (e.g. 9):'), 10);
-  let mine = parseInt(prompt('Enter number of mines (e.g. 10):'), 10); 
-
-  gridSize = size;
-  numberOfMines= mine;}
-
-userEnter();
-*/
-
-//Creating Grid
+let gridSize = 2;
+let numberOfMines = 1;
 
 
 function createGrid(gridSize, numberOfMines){
   const grid = [];
-  const minePositions = getMinePositions(gridSize,numberOfMines);
-
   for(let rows=0; rows<gridSize; rows++){
     const row =[];
     for(let cols=0; cols<gridSize; cols++){
       const individualTile = document.createElement('div');
-      individualTile.dataset.status = tileStatus.hidden;
-      
       const tiles = {
         individualTile,
         cols,
         rows,
-        mine: minePositions.some(mineMatch.bind(null,{ rows,cols })),
-        get status(){
-          return individualTile.dataset.status;
-        },
-        set status(value){
-          individualTile.dataset.status = value;
-        }
       }
-
       row.push(tiles)
     }
     grid.push(row)
@@ -63,10 +24,25 @@ function createGrid(gridSize, numberOfMines){
   return grid;
 }
 
+const grid = createGrid(gridSize,numberOfMines);
+grid.forEach(row=>{
+  row.forEach(tiles=>{
+    gridElement.append(tiles.individualTile);
 
-//Mine Positioning
+  })
+})
+
+gridElement.style.setProperty('--gs', gridSize)
+```
 
 
+
+# Step 2 Mine Checking 
+make a function to check for mine positions `const minePositions = getMinePositions(gridSize,numberOfMines);`
+
+add `mine: minePositions.some(mineMatch.bind(null,{ rows,cols })),` object value to the tiles object in grid.
+
+```
 function getMinePositions(gridSize,numberOfMines){
   const locations = [];
   while(locations.length < numberOfMines){
@@ -88,11 +64,11 @@ function random(size){
 function mineMatch(x,y){
 return x.rows === y.rows && x.cols === y.cols
 }
+```
 
+# Step 3 Flagging and Unflagging + Flag Counter
 
-//Flagging & Flag Counting functions
-
-
+```
 function flagged(tiles){
   if (tiles.status !== tileStatus.hidden && tiles.status !==tileStatus.marked){
     return
@@ -112,12 +88,13 @@ function flagCount(){
     return count + row.filter(tiles => tiles.status === tileStatus.marked).length
   },0);
   flagsLeftElement.textContent = numberOfMines-flaggedTiles;
+
 }
+```
 
+# Step 4 Revealing tiles + Check surrounding tiles
 
-//Revealing tile and check surrounding tiles function
-
-
+```
 function reveal(grid, tiles){
   if(tiles.status !== tileStatus.hidden){
     return;
@@ -149,9 +126,11 @@ function surroundingTiles(grid,{rows,cols}){
   }
   return surrounding;
 }
+```
 
+# Step 5 Win & Loss 
 
-//Win and Lose conditions and functions
+```
 
 function checkWin(grid){
 return grid.every(row=>{
@@ -196,30 +175,4 @@ function gameStatus(){
 function stopProp(e){
   e.stopImmediatePropagation()
 }
-
-
-//Rendering the grid
-
-
-const grid = createGrid(gridSize,numberOfMines);
-grid.forEach(row=>{
-  row.forEach(tiles=>{
-    gridElement.append(tiles.individualTile);
-    tiles.individualTile.addEventListener('click', ()=>{
-      reveal(grid, tiles);
-      gameStatus();
-    })
-    tiles.individualTile.addEventListener('contextmenu',e =>{
-      e.preventDefault();
-      flagged(tiles);
-      flagCount();
-    })
-  })
-})
-
-gridElement.style.setProperty('--gs', gridSize)
-flagsLeftElement.textContent = numberOfMines;
-
-
-
-
+```

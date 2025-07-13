@@ -1,0 +1,59 @@
+
+/*
+let timer = 0;
+
+const container = document.getElementById('minesweeper');
+const buttons = document.querySelectorAll('button');
+const timerElement = document.getElementById('Timer')
+
+
+const createGrid = () => {
+  container.innerHTML = '';
+  timerElement.innerHTML +=1;
+
+  for (let r = 0; r < rows; r++) {
+    const row = document.createElement('div');
+    row.classList.add('row');
+
+    for (let c = 0; c < cols; c++) {
+      const col = document.createElement('div');
+      col.classList.add('col');
+         
+      col.dataset.row = r;
+      col.dataset.col = c;
+   
+      row.appendChild(col);
+    }
+
+    container.appendChild(row);
+  }
+};
+
+const diff = (event) => {
+  const difficulty = event.target.id;
+
+  if (difficulty === 'easy') {
+    rows = 9;
+    cols = 9;
+  } else if (difficulty === 'medium') {
+    rows = 12;
+    cols = 12;
+  } else if (difficulty === 'hard') {
+    rows = 15;
+    cols = 15;
+  }
+
+  // Now that rows and cols are set, build the grid
+  createGrid();
+};
+
+buttons.forEach(button => {
+  button.addEventListener('click', diff);
+  
+});
+
+
+
+*/
+
+

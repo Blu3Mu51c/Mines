@@ -5,8 +5,7 @@ Minesweeper is a logic puzzle video game genre generally played on personal comp
 
 ## Game
 * Player is greeted with a welcome title and game name.
-* Player is give 3 difficulty types to choose.
-* Easy (8x8) , Medium (12x12), Hard (16x16)
+* Player is prompted to enter `gridSize` and `numberOfMines`
 ### Grid
 * Grid of clickable tiles presented to the player.
 * Player is prompted to click any tile on the grid.
