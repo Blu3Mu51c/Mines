@@ -105,9 +105,27 @@ function reveal(grid, tiles){
     return;
   }
   else
-  tiles.status = tileStatus.number;}
+  tiles.status = tileStatus.number;
+  const checkSurround = surroundingTiles(grid,tiles)
+  const mines = checkSurround.filter(t => t.mine)
+  if (mines.length === 0){
+    checkSurround.forEach(reveal.bind(null,grid))
+  }
+  else{
+    tiles.individualTile.textContent = mines.length;
+  }
+}
 
-
+function surroundingTiles(grid,{rows,cols}){
+  const surrounding = [];
+  for (let rowsOffset = -1; rowsOffset<=1; rowsOffset++){
+    for (let colsOffset = -1; colsOffset<=1; colsOffset++){
+      const tiles = grid [rows +rowsOffset]?.[cols +colsOffset]
+      if(tiles) surrounding.push(tiles)
+    }
+  }
+  return surrounding;
+}
 
 
 
