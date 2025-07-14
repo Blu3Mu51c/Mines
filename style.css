@@ -11,12 +11,20 @@ body {
     color: white;
 }
 
+#theme{
+    border-radius: 20%;
+    text-align: center;
+     font-size: 50%;
+}
+
 h2{
     margin:0px;
     color:rgb(193, 114, 17);
     text-align: center;
 }
-
+#gridSize{
+    text-align: center;
+}
 .flagText {
     color: black;
     font-size: 1.5rem;
@@ -24,7 +32,7 @@ h2{
 }
 .grid {
     display: inline-grid;
-    padding: 10px;
+    padding: 20px;
     gap: 6px;
     border-radius: 5%;
     background-color: rgb(255, 153, 29);
@@ -39,18 +47,102 @@ h2{
     color: black;
     user-select: none;
 }
-.grid > [data-status="hidden"] {
+.grid > [data-status='hidden'] {
     background-color: rgb(193, 114, 17);
     cursor: pointer;
 }
-.grid > [data-status="mine"] {
+.grid > [data-status='mine'] {
     background-color: rgb(255, 128, 128);
 }
-.grid > [data-status="marked"] {
+.grid > [data-status='marked'] {
     background-color: rgb(174, 255, 158);
 }
-.grid > [data-status="number"] {
-    background-color: wheat;
+.grid > [data-status='number'] {
+    background-color: rgb(251, 214, 147);
 }
 
 
+
+
+/* Oreo */
+body[data-theme='oreo'] {
+    background-color: rgb(3, 0, 90);
+    color: black;
+}
+body[data-theme='oreo']
+h2{
+
+    color:white;
+}
+
+body[data-theme='oreo'] 
+.grid {
+background-color: white;
+}
+
+body[data-theme='oreo']
+.flagText {
+    color: white;
+}
+
+body[data-theme='oreo'] 
+.grid > [data-status='hidden'] {
+    background-color: rgb(27, 20, 12);
+}
+
+body[data-theme='oreo'] 
+.grid > [data-status='mine'] {
+    background-color: rgb(255, 128, 128);
+}
+
+body[data-theme='oreo'] 
+.grid > [data-status='marked'] {
+    background-color: rgb(174, 255, 158);
+}
+
+body[data-theme='oreo'] 
+.grid > [data-status='number'] {
+    background-color: rgb(206, 206, 206);
+}
+
+
+
+/* Chocolate */
+body[data-theme='chocolate'] {
+    background-color: rgba(91, 50, 0, 0.678);
+    color: white;
+}
+body[data-theme='chocolate']
+h2{
+    color:rgb(43, 27, 11);
+}
+
+body[data-theme='chocolate'] 
+.grid {
+background-color: rgb(63, 36, 6);
+}
+
+body[data-theme='chocolate']
+.flagText {
+    color: white;
+}
+
+body[data-theme='chocolate'] 
+.grid > [data-status='hidden'] {
+    background-color: rgb(119, 65, 3);
+}
+
+body[data-theme='chocolate'] 
+.grid > [data-status='mine'] {
+    background-color: rgb(255, 128, 128);
+}
+
+body[data-theme='chocolate'] 
+.grid > [data-status='marked'] {
+    background-color: rgb(174, 255, 158);
+}
+
+body[data-theme='chocolate'] 
+.grid > [data-status='number'] {
+    background-color: rgb(198, 113, 52);
+}

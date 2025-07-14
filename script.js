@@ -1,10 +1,8 @@
 const gridElement = document.querySelector('.grid');
 const flagsLeftElement = document.querySelector('#flagLeft');
 const flagTextElement = document.querySelector('.flagText');
-
-
-let gridSize = 9;
-let numberOfMines = 9;
+const selectTheme = document.getElementById('theme')
+const saveTheme = localStorage.getItem('selectedTheme');
 
 const tileStatus = {
     hidden:'hidden',
@@ -13,6 +11,8 @@ const tileStatus = {
     marked:'marked',
 }
 
+let gridSize = 9;
+let numberOfMines = 4;
 
 //Creating Grid
 
@@ -188,9 +188,9 @@ function stopProp(e){
 }
 
 
+
+
 //Rendering the grid
-
-
 const grid = createGrid(gridSize,numberOfMines);
 grid.forEach(row=>{
   row.forEach(tiles=>{
@@ -209,3 +209,28 @@ grid.forEach(row=>{
 
 gridElement.style.setProperty('--gs', gridSize)
 flagsLeftElement.textContent = numberOfMines;
+
+
+
+
+
+
+
+
+//Themes
+if(saveTheme){
+  selectTheme.value = saveTheme;
+  document.body.setAttribute('data-theme',saveTheme)
+}
+else{
+  document.body.setAttribute('data-theme',selectTheme.value)
+}
+
+selectTheme.addEventListener('click',event=>{
+const selectedTheme = event.target.value;
+document.body.setAttribute('data-theme', selectedTheme);
+localStorage.setItem('selectedTheme',selectedTheme)
+})
+
+
+
