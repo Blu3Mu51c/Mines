@@ -1,8 +1,12 @@
 const gridElement = document.querySelector('.grid');
+
 const flagsLeftElement = document.querySelector('#flagLeft');
 const flagTextElement = document.querySelector('.flagText');
+
 const selectTheme = document.getElementById('theme')
 const saveTheme = localStorage.getItem('selectedTheme');
+
+const timer = document.querySelector('.timer')
 
 const tileStatus = {
     hidden:'hidden',
@@ -12,7 +16,9 @@ const tileStatus = {
 }
 
 let gridSize = 9;
-let numberOfMines = 4;
+let numberOfMines = 9;
+let timeTick = 0;
+let timerInterval;
 
 //Creating Grid
 
@@ -164,6 +170,7 @@ function gameStatus(){
   const lose = checkLose(grid);
 
   if (win||lose){
+    stopTimer()
     gridElement.addEventListener('click', stopProp, {capture :true})
     gridElement.addEventListener('contextmenu', stopProp, {capture :true})
   }
@@ -198,6 +205,7 @@ grid.forEach(row=>{
     tiles.individualTile.addEventListener('click', ()=>{
       reveal(grid, tiles);
       gameStatus();
+      startTimer();
     })
     tiles.individualTile.addEventListener('contextmenu',e =>{
       e.preventDefault();
@@ -208,10 +216,8 @@ grid.forEach(row=>{
 })
 
 gridElement.style.setProperty('--gs', gridSize)
+
 flagsLeftElement.textContent = numberOfMines;
-
-
-
 
 
 
@@ -219,18 +225,32 @@ flagsLeftElement.textContent = numberOfMines;
 
 //Themes
 if(saveTheme){
-  selectTheme.value = saveTheme;
+  selectTheme.value = saveTheme;  //checks if current value is equal to the savetheme value
   document.body.setAttribute('data-theme',saveTheme)
 }
-else{
+else{ //if it isnt it sets the current value
   document.body.setAttribute('data-theme',selectTheme.value)
 }
 
-selectTheme.addEventListener('click',event=>{
-const selectedTheme = event.target.value;
+selectTheme.addEventListener('click',e=>{
+const selectedTheme = e.target.value; //adds event listener to check for which value is active 
 document.body.setAttribute('data-theme', selectedTheme);
-localStorage.setItem('selectedTheme',selectedTheme)
+localStorage.setItem('selectedTheme',selectedTheme) //push active value to the local storage of saved theme
 })
 
 
 
+//Timer
+
+function startTimer(){
+  if(timerInterval) return // so that timer doesnt increment with each click
+  timerInterval = setInterval(()=>{ //timer interval that will increase by 1 every 1 second
+    timeTick++;
+    timer.textContent = `${String(timeTick).padStart(3, '0')}`; //formats time as 000
+  },1000)
+}
+
+
+function stopTimer(){ //stops the timerinterval to whatever was the last value
+  clearInterval(timerInterval);
+}

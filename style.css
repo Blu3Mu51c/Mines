@@ -11,23 +11,35 @@ body {
     color: white;
 }
 
-#theme{
-    border-radius: 20%;
-    text-align: center;
-     font-size: 50%;
-}
+
 
 h2{
     margin:0px;
     color:rgb(193, 114, 17);
     text-align: center;
 }
+#difficulty{
+    font-size: 1rem;
+}
+.timer{
+    background: rgb(255, 153, 29);;
+    border-radius: 20px;
+    width: 10%;
+    text-align:center;
+    margin-bottom: 15px;
+    color: black;
+}
 #gridSize{
     text-align: center;
 }
 .flagText {
     color: black;
+    text-align: center;
+    width: 9rem;
+    height: 2.5rem;
+
     font-size: 1.5rem;
+    border-radius: 50%;
     margin-bottom: 10px;
 }
 .grid {
@@ -85,6 +97,12 @@ body[data-theme='oreo']
     color: white;
 }
 
+body[data-theme='oreo']
+.timer{
+    background: white;
+    color: black;
+}
+
 body[data-theme='oreo'] 
 .grid > [data-status='hidden'] {
     background-color: rgb(27, 20, 12);
@@ -105,6 +123,13 @@ body[data-theme='oreo']
     background-color: rgb(206, 206, 206);
 }
 
+#theme{
+    margin: 25px 0px 25px 0px;
+    border-radius: 20%;
+    text-align: center;
+    font-size: 50%;
+    width: 30%;
+}
 
 
 /* Chocolate */
@@ -114,7 +139,7 @@ body[data-theme='chocolate'] {
 }
 body[data-theme='chocolate']
 h2{
-    color:rgb(43, 27, 11);
+    color:rgb(119, 65, 3);
 }
 
 body[data-theme='chocolate'] 
@@ -125,6 +150,12 @@ background-color: rgb(63, 36, 6);
 body[data-theme='chocolate']
 .flagText {
     color: white;
+}
+
+body[data-theme='chocolate']
+.timer{
+    background: rgb(216, 124, 59);;
+    color: black;
 }
 
 body[data-theme='chocolate'] 
@@ -144,5 +175,5 @@ body[data-theme='chocolate']
 
 body[data-theme='chocolate'] 
 .grid > [data-status='number'] {
-    background-color: rgb(198, 113, 52);
+    background-color: rgb(216, 124, 59);
 }
