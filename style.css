@@ -12,7 +12,6 @@ body {
 }
 
 
-
 h2{
     margin:0px;
     color:rgb(193, 114, 17);
@@ -115,7 +114,7 @@ body[data-theme='oreo']
 
 body[data-theme='oreo'] 
 .grid > [data-status='marked'] {
-    background-color: rgb(174, 255, 158);
+    background-color: rgb(48, 36, 23);
 }
 
 body[data-theme='oreo'] 
@@ -170,7 +169,7 @@ body[data-theme='chocolate']
 
 body[data-theme='chocolate'] 
 .grid > [data-status='marked'] {
-    background-color: rgb(174, 255, 158);
+    background-color: rgb(255, 213, 154);
 }
 
 body[data-theme='chocolate'] 

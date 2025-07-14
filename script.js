@@ -1,28 +1,35 @@
+//DOM
 const gridElement = document.querySelector('.grid');
-
 const flagsLeftElement = document.querySelector('#flagLeft');
 const flagTextElement = document.querySelector('.flagText');
-
 const selectTheme = document.getElementById('theme')
 const saveTheme = localStorage.getItem('selectedTheme');
-
 const timer = document.querySelector('.timer')
+const difficultyRadios = document.querySelectorAll('input[name="difficulty"]');
 
+//object for tile status
 const tileStatus = {
-    hidden:'hidden',
-    mine:'mine',
-    number:'number',
-    marked:'marked',
+  hidden:'hidden',
+  mine:'mine',
+  number:'number',
+  marked:'marked',
 }
 
-let gridSize = 9;
-let numberOfMines = 9;
+//object for difficulty
+const difficultyOptions = {
+  easy: { gridSize: 9, numberOfMines: 10 },
+  medium: { gridSize: 16, numberOfMines: 40 },
+  hard: { gridSize: 22, numberOfMines: 99 }
+};
+
+
+//variables
+let gridSize = 10;
+let numberOfMines = 10;
 let timeTick = 0;
 let timerInterval;
 
 //Creating Grid
-
-
 function createGrid(gridSize, numberOfMines){
   const grid = [];
   const minePositions = getMinePositions(gridSize,numberOfMines);
@@ -55,8 +62,6 @@ function createGrid(gridSize, numberOfMines){
 
 
 //Mine Positioning
-
-
 function getMinePositions(gridSize,numberOfMines){
   const locations = []; //locations of the mines in array x,y
 
@@ -85,8 +90,6 @@ return x.rows === y.rows && x.cols === y.cols
 
 
 //Flagging & Flag Counting functions
-
-
 //if tile is not marked and hidden mark it and if it is marked then unmark
 function flagged(tiles){
   if (tiles.status !== tileStatus.hidden && tiles.status !==tileStatus.marked){
@@ -98,7 +101,7 @@ function flagged(tiles){
   }
   else {
     tiles.status = tileStatus.marked;
-    tiles.individualTile.textContent = 'O';
+    tiles.individualTile.textContent = '🚩';
   }
 }
 
@@ -112,15 +115,13 @@ function flagCount(){
 
 
 //Revealing tile and check surrounding tiles function
-
-
 function reveal(grid, tiles){
   if(tiles.status !== tileStatus.hidden){
     return;
   }
   if (tiles.mine){
     tiles.status = tileStatus.mine;
-    tiles.individualTile.textContent = 'X'
+    tiles.individualTile.textContent = '💣'
     return;
   }
   else
@@ -148,7 +149,6 @@ function surroundingTiles(grid,{rows,cols}){
 
 
 //Win and Lose conditions and functions
-
 function checkWin(grid){
 return grid.every(row=>{
   return row.every(tiles=>{
@@ -221,8 +221,6 @@ flagsLeftElement.textContent = numberOfMines;
 
 
 
-
-
 //Themes
 if(saveTheme){
   selectTheme.value = saveTheme;  //checks if current value is equal to the savetheme value
@@ -254,3 +252,51 @@ function startTimer(){
 function stopTimer(){ //stops the timerinterval to whatever was the last value
   clearInterval(timerInterval);
 }
+
+
+
+
+/*
+
+let grid;
+
+//Difficulty Set
+difficultyRadios.forEach(radio => {
+  radio.addEventListener('change', () => {
+    if (radio.checked) {
+      const { gridSize: newSize, numberOfMines: newMines } = difficultyOptions[radio.value];
+      gridSize = newSize;
+      numberOfMines = newMines;
+    }
+  });
+});
+//Reset Grid
+
+document.getElementById('startGameBtn').addEventListener('click', () => {
+  const gridData = createGrid(gridSize, numberOfMines);
+  grid = gridData;
+  renderGrid(grid);
+});
+
+
+
+function renderGrid(grid) {
+  grid.forEach(row => {
+    row.forEach(tiles => {
+      gridElement.append(tiles.individualTile);
+      tiles.individualTile.addEventListener('click', () => {
+        reveal(grid, tiles);
+        gameStatus();
+        startTimer();
+      });
+      tiles.individualTile.addEventListener('contextmenu', e => {
+        e.preventDefault();
+        flagged(tiles);
+        flagCount();
+      });
+    });
+  });
+  gridElement.style.setProperty('--gs', gridSize);
+  flagsLeftElement.textContent = numberOfMines;
+}
+  */
