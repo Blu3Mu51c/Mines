@@ -8,6 +8,12 @@ const timer = document.querySelector('.timer');
 const userGrid = document.getElementById('userGrid');
 const userMine = document.getElementById('userMine');
 const setGridButton = document.getElementById('btn');
+const explodeSound = new Audio('./assets/Explode.mp3')
+const loseSound = new Audio('./assets/Lose.mp3')
+const winSound = new Audio('./assets/Win.mp3')
+const tileSound = new Audio('./assets/Tile.mp3')
+const flagSound = new Audio('./assets/Flag.mp3')
+
 
 
 
@@ -131,6 +137,8 @@ function flagged(tiles){
     tiles.individualTile.textContent = '';
   }
   else {
+    flagSound.playbackRate = 2;
+    flagSound.play();
     tiles.status = tileStatus.marked;
     tiles.individualTile.textContent = '🚩';
   }
@@ -157,8 +165,12 @@ function reveal(grid, tiles){
   }
   else
   tiles.status = tileStatus.number;
+  tileSound.playbackRate=1.5;
+  tileSound.play();
   const checkSurround = surroundingTiles(grid,tiles)
   const mines = checkSurround.filter(t => t.mine)
+
+  //recursively expand empty tiles until finds a number tile
   if (mines.length === 0){
     checkSurround.forEach(reveal.bind(null,grid))
   }
@@ -212,10 +224,14 @@ function gameStatus(){
   }
 
   if (win){
+    winSound.play();
     flagTextElement.textContent = `You Win`
     timer.textContent=`You won in ${timeTick}s`
   }
    if (lose){
+    explodeSound.play();
+
+    loseSound.play();
     flagTextElement.textContent = 'Boom, You lose'
     timeTick = 0;
     grid.forEach(row=>{
