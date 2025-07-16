@@ -4,10 +4,10 @@ Minesweeper is a logic puzzle video game genre generally played on personal comp
 
 
 ## Game
-* Player is greeted with a welcome title and game name.
-* Player is prompted to enter `gridSize` and `numberOfMines`
+* **Game** greets the player with a welcome title and game name.
+* Player is prompted to enter `gridSize` and `numberOfMines`.
 ### Grid
-* Grid of clickable tiles presented to the player.
+* **Grid** of clickable tiles presented to the player.
 * Player is prompted to click any tile on the grid.
 * Upon clicking, Grid unveils a block of tiles to the user with numbers in some unveiled tiles representing the amount of mines the tile is in contact with.
 ### Mines
@@ -19,59 +19,41 @@ Minesweeper is a logic puzzle video game genre generally played on personal comp
 * Player is provided with a limited numbers of flags.
 * The number of flags player has are shown to player at all times.
 * Player can mark any veiled tile in the grid.
-### Reset
-* A reset button is present for the player.
-* Reset button resets the game back to new game.
 ### Timer
-* A timer is present at the top.
-* Timer lets the player know the amount of time he has taken to win the game.
+* **Timer** is present at the top.
+* The timer lets the player know the amount of time he took to clear the mines.
+### Game Status
+* **Game Status** lets the user know if he won or lost the game through a message
 
 ## Game Logic (Pseudocode)
 * HTML setup
-    * Game title
-    * Grid
-    * Flag Amount
-    * Timer
-    * Winning message
-    * Losing message
-    * Play again button
+    * metadata
+    * div for grid
+    * div for flag amount
+    * div for timer
+    * select and options for themes
 * CSS
     * Styling
+    * Styling different data-statuses for tile object
+
 * Javascript setup
-    * 2D Array Grid
-    * tile = Covered, Revealed, Flagged
+    * 2D array grid with objects inside
+    * object tile = Covered, Revealed, Flagged
     * Variables
-        * winner = boolean;
-        * loser = boolean;
-    * Left Click = Reveal;
-    * Right Click = Flag;
+        gridSize
+        numberOfMines
+        timer
+        timeInterval
+    * Left Click = 'click' =  Reveal;
+    * Right Click = 'contextmenu = Flag;
 
-Grid made using [i][j] or [i][i] where i and j are integers.
+Grid made using [rows][cols] where rows and cols are integers.
 
-After game starts (on player click) generate limited number of mines randomly all across using math.random method.
+After game grid is set generate limited number of mines randomly all across using math.random 
+on 2 random coordinates that are not already a mine.
 
-Iterate through the 2d array and find all mines and scan each tile in contact with each mine horizontally, vertically and diagonally.
-
-`mine.contact++;`
+Iterate through the 2d array using offset and find all mines and scan each tile in contact with each mine horizontally, vertically and diagonally.
 
 When tile is clicked that is in contact with a mine/mines reveal only that tile with a number & color representing the amount of mines in contact.
-
-```
-If tile === mine loser = true;
-Message = You Lost;
-Timer stop;
-
-If all mines === flagged winner = true;
-Message = You Won;
-Timer stop;
-```
-
-reset onClick 
-```
-all tiles = covered;
-winner = false;
-loser = false;
-timer = null;
-```
 
 ![Mine](./assets/Mine.png)

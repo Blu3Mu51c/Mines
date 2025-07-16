@@ -5,7 +5,13 @@ const flagTextElement = document.querySelector('.flagText');
 const selectTheme = document.getElementById('theme')
 const saveTheme = localStorage.getItem('selectedTheme');
 const timer = document.querySelector('.timer')
-const difficultyRadios = document.querySelectorAll('input[name="difficulty"]');
+
+
+
+/*const lossAudio = new Audio('./assets/Loss.wav')
+const winAudio = new Audio('./assets/Win.wav')
+const clickAudio = new Audio('./assets/Event.wav')
+*/
 
 //object for tile status
 const tileStatus = {
@@ -15,19 +21,25 @@ const tileStatus = {
   marked:'marked',
 }
 
-//object for difficulty
-const difficultyOptions = {
-  easy: { gridSize: 9, numberOfMines: 10 },
-  medium: { gridSize: 16, numberOfMines: 40 },
-  hard: { gridSize: 22, numberOfMines: 99 }
-};
+
+function userGrid(){
+  const userGrid = Math.floor(parseInt(prompt("Enter desired grid size e.g 10")))
+  const userMines = Math.floor(parseInt(prompt("Enter desired number of mines e.g 10")))
+  gridSize=userGrid;
+  numberOfMines=userMines;
+}
+
 
 
 //variables
-let gridSize = 10;
-let numberOfMines = 10;
+let gridSize =10;
+let numberOfMines=10;
 let timeTick = 0;
 let timerInterval;
+
+
+
+userGrid();
 
 //Creating Grid
 function createGrid(gridSize, numberOfMines){
@@ -45,6 +57,8 @@ function createGrid(gridSize, numberOfMines){
         cols,
         rows,
         mine: minePositions.some(mineMatch.bind(null,{ rows,cols })),
+
+        //get and set methods to get the current status of tile that was clicked
         get status(){
           return individualTile.dataset.status;
         },
@@ -66,6 +80,7 @@ function getMinePositions(gridSize,numberOfMines){
   const locations = []; //locations of the mines in array x,y
 
   while(locations.length < numberOfMines){
+
     const location = {  //random coordinates for the mine
       rows:random(gridSize),
       cols:random(gridSize)
@@ -176,9 +191,11 @@ function gameStatus(){
   }
 
   if (win){
+    //winAudio.play();
     flagTextElement.textContent = 'You Win'
   }
    if (lose){
+     //lossAudio.play();
     flagTextElement.textContent = 'You lose'
     grid.forEach(row=>{
       row.forEach(tiles=>{
@@ -256,7 +273,50 @@ function stopTimer(){ //stops the timerinterval to whatever was the last value
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*
+
+const difficultyRadios = document.querySelectorAll('input[name="difficulty"]');
+
+object for difficulty
+const difficultyOptions = {
+  easy: { gridSize: 9, numberOfMines: 10 },
+  medium: { gridSize: 16, numberOfMines: 40 },
+  hard: { gridSize: 22, numberOfMines: 99 }
+};
+
 
 let grid;
 
