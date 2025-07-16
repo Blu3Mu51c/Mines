@@ -4,14 +4,12 @@ const flagsLeftElement = document.querySelector('#flagLeft');
 const flagTextElement = document.querySelector('.flagText');
 const selectTheme = document.getElementById('theme')
 const saveTheme = localStorage.getItem('selectedTheme');
-const timer = document.querySelector('.timer')
+const timer = document.querySelector('.timer');
+const userGrid = document.getElementById('userGrid');
+const userMine = document.getElementById('userMine');
+const setGridButton = document.getElementById('btn');
 
 
-
-/*const lossAudio = new Audio('./assets/Loss.wav')
-const winAudio = new Audio('./assets/Win.wav')
-const clickAudio = new Audio('./assets/Event.wav')
-*/
 
 //object for tile status
 const tileStatus = {
@@ -22,24 +20,42 @@ const tileStatus = {
 }
 
 
-function userGrid(){
-  const userGrid = Math.floor(parseInt(prompt("Enter desired grid size e.g 10")))
-  const userMines = Math.floor(parseInt(prompt("Enter desired number of mines e.g 10")))
-  gridSize=userGrid;
-  numberOfMines=userMines;
-}
-
-
 
 //variables
-let gridSize =10;
-let numberOfMines=10;
+let gridSize;
+let numberOfMines;
 let timeTick = 0;
 let timerInterval;
 
+//Set grid size and number of mines
+//lets say default grid size is 12 with 10 mines so any constraints can be eliminated
+function setGrid(){
+  gridValue = Math.floor(parseInt(userGrid.value));
+  mineValue = Math.floor(parseInt(userMine.value));
 
+  gridSize = gridValue;
+  numberOfMines = mineValue;
+  maxMines = gridValue*gridValue;
+  console.log(maxMines)
+  if(!gridValue  || !mineValue){
+    gridSize = 12;
+    numberOfMines = 10;
+  }
+  else if(mineValue>= maxMines){
+    gridSize = 12;
+    numberOfMines = 10;
+  }
+userGrid.value="";
+  userMine.value="";
 
-userGrid();
+  }
+
+setGridButton.addEventListener('click',setGrid())
+//reloads the page
+function reloadPage(){
+  location.reload();
+  
+}
 
 //Creating Grid
 function createGrid(gridSize, numberOfMines){
@@ -180,38 +196,39 @@ return grid.some(row=>{
 })
 }
 
+
+
+
+
 function gameStatus(){
   const win = checkWin(grid);
   const lose = checkLose(grid);
 
   if (win||lose){
-    stopTimer()
+    stopTimer();
     gridElement.addEventListener('click', stopProp, {capture :true})
     gridElement.addEventListener('contextmenu', stopProp, {capture :true})
   }
 
   if (win){
-    //winAudio.play();
-    flagTextElement.textContent = 'You Win'
+    flagTextElement.textContent = `You Win`
+    timer.textContent=`You won in ${timeTick}s`
   }
    if (lose){
-     //lossAudio.play();
-    flagTextElement.textContent = 'You lose'
+    flagTextElement.textContent = 'Boom, You lose'
+    timeTick = 0;
     grid.forEach(row=>{
       row.forEach(tiles=>{
-        if(tiles.status === tileStatus.marked) flagged(tiles);
+        if(tiles.status === tileStatus.marked)flagged(tiles);
         if(tiles.mine) reveal(grid,tiles)
       })
     })
   }
 }
-
-
+//utility function to stop the game after the win or loss has happened
 function stopProp(e){
   e.stopImmediatePropagation()
 }
-
-
 
 
 //Rendering the grid
@@ -233,10 +250,8 @@ grid.forEach(row=>{
 })
 
 gridElement.style.setProperty('--gs', gridSize)
-
 flagsLeftElement.textContent = numberOfMines;
-
-
+console.log(grid);
 
 //Themes
 if(saveTheme){
@@ -270,93 +285,3 @@ function stopTimer(){ //stops the timerinterval to whatever was the last value
   clearInterval(timerInterval);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-
-const difficultyRadios = document.querySelectorAll('input[name="difficulty"]');
-
-object for difficulty
-const difficultyOptions = {
-  easy: { gridSize: 9, numberOfMines: 10 },
-  medium: { gridSize: 16, numberOfMines: 40 },
-  hard: { gridSize: 22, numberOfMines: 99 }
-};
-
-
-let grid;
-
-//Difficulty Set
-difficultyRadios.forEach(radio => {
-  radio.addEventListener('change', () => {
-    if (radio.checked) {
-      const { gridSize: newSize, numberOfMines: newMines } = difficultyOptions[radio.value];
-      gridSize = newSize;
-      numberOfMines = newMines;
-    }
-  });
-});
-//Reset Grid
-
-document.getElementById('startGameBtn').addEventListener('click', () => {
-  const gridData = createGrid(gridSize, numberOfMines);
-  grid = gridData;
-  renderGrid(grid);
-});
-
-
-
-function renderGrid(grid) {
-  grid.forEach(row => {
-    row.forEach(tiles => {
-      gridElement.append(tiles.individualTile);
-      tiles.individualTile.addEventListener('click', () => {
-        reveal(grid, tiles);
-        gameStatus();
-        startTimer();
-      });
-      tiles.individualTile.addEventListener('contextmenu', e => {
-        e.preventDefault();
-        flagged(tiles);
-        flagCount();
-      });
-    });
-  });
-  gridElement.style.setProperty('--gs', gridSize);
-  flagsLeftElement.textContent = numberOfMines;
-}
-  */

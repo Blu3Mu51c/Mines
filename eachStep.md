@@ -91,7 +91,7 @@ function flagCount(){
 
 }
 ```
-
+add `mine: minePositions.some(mineMatch.bind(null,{ rows,cols })),` object value to the tiles object in grid.
 # Step 4 Revealing tiles + Check surrounding tiles
 
 ```
@@ -176,3 +176,4 @@ function stopProp(e){
   e.stopImmediatePropagation()
 }
 ```
+

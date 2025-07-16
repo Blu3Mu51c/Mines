@@ -12,13 +12,17 @@
 </head>
 <body>
   
-<h2> Welcome to MineHunter</h2>
+<h2> Welcome to MineHunter </h2>
 
- <div class="flagText">🚩Left: 
+<input id="userGrid" type="number" placeholder="Enter grid size">
+<input id="userMine" type="number" placeholder="Enter the number of mines">
+<button id="btn" onclick="reloadPage()">Set</button>
+
+ <div class="flagText">🚩: 
   <span id="flagLeft"></span>
   </div>
   <div class="timer">000</div>
-<div class="grid"></div>
+  <div class="grid"></div>
 
  <select id="theme">
     <option value="waffle">Waffle</option>
@@ -28,13 +32,3 @@
 </body>
   <script src="script.js"></script>
 </html>
-
-
-
-
-<!-- <div class="difficulty">
-  <label><input type="radio" name="difficulty" value="easy" checked> Easy</label>
-  <label><input type="radio" name="difficulty" value="medium"> Medium</label>
-  <label><input type="radio" name="difficulty" value="hard"> Hard</label>
-</div>
-<button id="startGameBtn">Start Game</button> -->
