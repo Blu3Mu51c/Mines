@@ -5,7 +5,7 @@ Minesweeper is a logic puzzle video game genre generally played on personal comp
 
 ## Game
 * **Game** greets the player with a welcome title and game name.
-* Player is prompted to enter `gridSize` and `numberOfMines`.
+* Player is prompted to enter `gridSize` and `numberOfMines` in an input.
 ### Grid
 * **Grid** of clickable tiles presented to the player.
 * Player is prompted to click any tile on the grid.
@@ -28,6 +28,10 @@ Minesweeper is a logic puzzle video game genre generally played on personal comp
 ## Game Logic (Pseudocode)
 * HTML setup
     * metadata
+    * h2 tag for title
+    * input for grid size
+    * input for number of mines
+    * button for setting input
     * div for grid
     * div for flag amount
     * div for timer
@@ -55,5 +59,13 @@ on 2 random coordinates that are not already a mine.
 Iterate through the 2d array using offset and find all mines and scan each tile in contact with each mine horizontally, vertically and diagonally.
 
 When tile is clicked that is in contact with a mine/mines reveal only that tile with a number & color representing the amount of mines in contact.
+
+When tile is right clicked then mark that tile with a flag and decrement the count of flag.
+
+Timer starts when initially grid tile is clicked and stops when one of the 2 game statuses is reached.
+
+Once a mine is clicked game is over and show all the mines.
+
+Once all number tiles are revealed without triggering the mines game is won.
 
 ![Mine](./assets/Mine.png)
