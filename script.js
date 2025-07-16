@@ -205,6 +205,7 @@ function gameStatus(){
   const lose = checkLose(grid);
 
   if (win||lose){
+    startTimer();
     stopTimer();
     gridElement.addEventListener('click', stopProp, {capture :true})
     gridElement.addEventListener('contextmenu', stopProp, {capture :true})

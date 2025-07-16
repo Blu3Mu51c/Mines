@@ -3,27 +3,42 @@
 Minesweeper is a logic puzzle video game genre generally played on personal computers. The game features a grid of clickable tiles, with hidden mines dispersed throughout the board. The objective is to clear the board without detonating any mines, with help from clues about the number of neighboring mines in each field. 
 
 
-## Game
-* **Game** greets the player with a welcome title and game name.
-* Player is prompted to enter `gridSize` and `numberOfMines` in an input.
-### Grid
-* **Grid** of clickable tiles presented to the player.
-* Player is prompted to click any tile on the grid.
-* Upon clicking, Grid unveils a block of tiles to the user with numbers in some unveiled tiles representing the amount of mines the tile is in contact with.
-### Mines
-* **Mines** are the hurdle in the game
-* If player clicks on a mine he loses the game.
-* If player clears all mines he wins the game.
-### Flags
-* **Flags** are used to represent a mine under a veiled tile.
-* Player is provided with a limited numbers of flags.
-* The number of flags player has are shown to player at all times.
-* Player can mark any veiled tile in the grid.
-### Timer
-* **Timer** is present at the top.
-* The timer lets the player know the amount of time he took to clear the mines.
-### Game Status
-* **Game Status** lets the user know if he won or lost the game through a message
+## Game Overview
+- The game welcomes the player with a title screen and game name.
+- Players can enter a custom `gridSize` and `numberOfMines`.
+- If no input is given, the default grid is 12x12 with 10 mines.
+
+## Grid
+- The grid consists of clickable tiles.
+- Clicking a tile reveals:
+  - A number indicating nearby mines, or
+  - An empty space that reveals adjacent safe tiles.
+  
+## Mines
+- Mines are randomly hidden within the grid.
+- Clicking on a mine results in an immediate game over.
+- Clearing all non-mine tiles results in a win.
+
+## Flags
+- Players can flag hidden tiles they suspect contain a mine.
+- The number of flags available matches the number of mines.
+- Flag count is always visible to the player.
+
+## Timer
+- A timer starts on the first click and counts up.
+- It displays the total time taken when the game ends.
+
+## Game Status
+- The game displays a message upon win or loss.
+- Mines are revealed if the player loses.
+
+## Themes
+- The game supports light and dark theme selection.
+- The selected theme is saved in local storage and restored on reload.
+
+## How to Run
+Open the `index.html` file in any modern web browser. No installation or setup required.
+
 
 ## Game Logic (Pseudocode)
 * HTML setup
@@ -41,31 +56,144 @@ Minesweeper is a logic puzzle video game genre generally played on personal comp
     * Styling different data-statuses for tile object
 
 * Javascript setup
-    * 2D array grid with objects inside
-    * object tile = Covered, Revealed, Flagged
-    * Variables
-        gridSize
-        numberOfMines
-        timer
-        timeInterval
-    * Left Click = 'click' =  Reveal;
-    * Right Click = 'contextmenu = Flag;
 
-Grid made using [rows][cols] where rows and cols are integers.
+DOM
 
-After game grid is set generate limited number of mines randomly all across using math.random 
-on 2 random coordinates that are not already a mine.
+* Assign HTML elements to variables:
+* Grid container
+* Flag counter
+* Theme selector
+* Timer
+* Input fields for grid and mine count
+* Set grid button
+* Retrieve saved theme from local storage (if exists)
 
-Iterate through the 2d array using offset and find all mines and scan each tile in contact with each mine horizontally, vertically and diagonally.
+Define tileStatus object with states: 
 
-When tile is clicked that is in contact with a mine/mines reveal only that tile with a number & color representing the amount of mines in contact.
+* `hidden` 
+* `mine` 
+* `number` 
+* `marked`
 
-When tile is right clicked then mark that tile with a flag and decrement the count of flag.
+Variables
 
-Timer starts when initially grid tile is clicked and stops when one of the 2 game statuses is reached.
+* `gridSize`
+* `numberOfMines`
+* `timer`
+* `timeInterval`
 
-Once a mine is clicked game is over and show all the mines.
+### Grid Parameters
 
-Once all number tiles are revealed without triggering the mines game is won.
+setGrid():
+* Read and parse user input for grid size and number of mines
+* If input invalid or too many mines:
+      Use default values (gridSize=12, numberOfMines=10)
+* Clear input fields
+
+### Create Grid
+
+createGrid(gridSize, numberOfMines):
+* Generate mine positions using getMinePositions()
+* For each tile:
+* Create HTML div element
+* Store tile's coordinates and whether it contains a mine
+* Define get/set methods for tile status
+* Return 2D array of tiles (grid)
+
+### Generate Random Mines
+
+getMinePositions(gridSize, numberOfMines):
+* Initialize empty location array
+* While total mines < desired number:
+* Generate random row/col coordinates
+* If coordinates not already in the array, add them
+* Return list of mine coordinates
+
+### Utility Functions
+random(size):
+* Return a random number from 0 to size-1
+
+mineMatch(x, y):
+* Return true if x and y have same row and column
+
+stopProp(event):
+* Prevent further event propagation (disable clicking tiles)
+
+### Flagging
+flagged(tile):
+* If tile is not hidden or marked, do nothing
+* Toggle between hidden and marked status
+* Add/remove flag emoji accordingly
+
+flagCount():
+* Count how many tiles are marked
+* Update flagsLeft display (mines - flagged)
+
+### Revealing
+
+reveal(grid, tile):
+* If tile is not hidden, do nothing
+* If tile is a mine:
+    * Set status to mine and show bomb emoji
+* Else:
+    * Set status to number
+    * Get surrounding tiles
+    * Count surrounding mines
+* If no mines, recursively revealsurrounding tiles
+* Else, display the number of nearby mines
+
+surroundingTiles(grid, tile):
+* Get all 8 neighboring tiles of the current tile
+* Return valid surrounding tiles
+    
+### Win and Lose Conditions
+checkWin(grid):
+* Return true if all non-mine tiles are revealed
+
+checkLose(grid):
+* Return true if any tile has status "mine"
+
+gameStatus():
+
+* Check for win or lose
+* If either is true:
+    * Stop timer
+    * Disable further clicks
+* If win:
+    * Display win message and time
+* If lose:
+    * Show all mines
+    * Remove any incorrect flags
+    * Display lose message
+### Render Grid
+Create grid using createGrid()
+For each tile:
+* Append to grid element in DOM
+* On left-click: reveal and check game status
+* On right-click: toggle flag and update flag count
+
+Set CSS grid size
+
+Initialize flag counter on screen
+
+### Theme Selection
+If theme is saved in local storage:
+* Set current theme from saved value
+Else:
+* Use selected theme from dropdown
+
+Add event listener to theme selector:
+* Update document theme and save selection in localStorage
+
+### Timer
+startTimer():
+* If already running, do nothing
+* Else, start counting every 1 second and display it
+
+stopTimer():
+* Clear the interval to stop the timer
+
+
+*Thanks for checking out this project!*
 
 ![Mine](./assets/Mine.png)

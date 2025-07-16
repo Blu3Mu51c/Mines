@@ -57,7 +57,7 @@ h2{
     border-radius: 2%;
     background-color: rgb(255, 153, 29);
     grid-template-columns: repeat(var(--gs), 60px);
-    grid-template-rows: repeat(var(--gs), 60px);
+    grid-template-rows: repeat(var(--gs), 610px);
 }
 .grid > * {
     border-radius: 15%;
