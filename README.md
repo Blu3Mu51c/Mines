@@ -39,6 +39,8 @@ Minesweeper is a logic puzzle video game genre generally played on personal comp
 ## How to Run
 Open the `index.html` file in any modern web browser. No installation or setup required.
 
+#WireFrame
+![WireFrame](./assets/WireFrame.png)
 
 ## Game Logic (Pseudocode)
 * HTML setup
