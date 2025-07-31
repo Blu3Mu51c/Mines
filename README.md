@@ -37,7 +37,7 @@ Minesweeper is a logic puzzle video game genre generally played on personal comp
 - The selected theme is saved in local storage and restored on reload.
 
 ## How to Run
-[MineHunter](minehunter.surge.sh)
+[MineHunter](https://minehunter.surge.sh/)
 
 Open the `index.html` file in any modern web browser. No installation or setup required.
 
