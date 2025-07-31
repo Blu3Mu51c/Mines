@@ -1,5 +1,5 @@
 
-# Mines (Minesweeper Clone)
+# MineHunter (Minesweeper Clone)
 Minesweeper is a logic puzzle video game genre generally played on personal computers. The game features a grid of clickable tiles, with hidden mines dispersed throughout the board. The objective is to clear the board without detonating any mines, with help from clues about the number of neighboring mines in each field. 
 
 
@@ -37,9 +37,12 @@ Minesweeper is a logic puzzle video game genre generally played on personal comp
 - The selected theme is saved in local storage and restored on reload.
 
 ## How to Run
+[MineHunter](minehunter.surge.sh)
+
 Open the `index.html` file in any modern web browser. No installation or setup required.
 
-#WireFrame
+
+# WireFrame
 ![WireFrame](./assets/WireFrame.png)
 
 ## Game Logic (Pseudocode)
