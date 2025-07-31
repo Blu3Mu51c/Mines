@@ -1,142 +1,141 @@
-//DOM
+// DOM elements
 const gridElement = document.querySelector('.grid');
 const flagsLeftElement = document.querySelector('#flagLeft');
 const flagTextElement = document.querySelector('.flagText');
-const selectTheme = document.getElementById('theme')
+const selectTheme = document.getElementById('theme');
 const saveTheme = localStorage.getItem('selectedTheme');
 const timer = document.querySelector('.timer');
 const userGrid = document.getElementById('userGrid');
 const userMine = document.getElementById('userMine');
 const setGridButton = document.getElementById('btn');
-const explodeSound = new Audio('./assets/Explode.mp3')
-const loseSound = new Audio('./assets/Lose.mp3')
-const winSound = new Audio('./assets/Win.mp3')
-const tileSound = new Audio('./assets/Tile.mp3')
-const flagSound = new Audio('./assets/Flag.mp3')
+const explodeSound = new Audio('./assets/Explode.mp3');
+const loseSound = new Audio('./assets/Lose.mp3');
+const winSound = new Audio('./assets/Win.mp3');
+const tileSound = new Audio('./assets/Tile.mp3');
+const flagSound = new Audio('./assets/Flag.mp3');
 
 
-
-
-//object for tile status
+// Tile status constants
 const tileStatus = {
-  hidden:'hidden',
-  mine:'mine',
-  number:'number',
-  marked:'marked',
-}
+  hidden: 'hidden',
+  mine: 'mine',
+  number: 'number',
+  marked: 'marked',
+};
 
 
-
-//variables
+// Variables
 let gridSize;
 let numberOfMines;
 let timeTick = 0;
 let timerInterval;
 
-//Set grid size and number of mines
-//lets say default grid size is 12 with 10 mines so any constraints can be eliminated
-function setGrid(){
+
+// Set grid size and number of mines
+// Defaults to 12x12 grid with 10 mines to avoid invalid values or constraints
+function setGrid() {
   gridValue = Math.floor(parseInt(userGrid.value));
   mineValue = Math.floor(parseInt(userMine.value));
 
   gridSize = gridValue;
   numberOfMines = mineValue;
-  maxMines = gridValue*gridValue;
-  console.log(maxMines)
-  if(!gridValue  || !mineValue){
+  maxMines = gridValue * gridValue;
+  console.log(maxMines);
+
+  if (!gridValue || !mineValue) {
+    gridSize = 12;
+    numberOfMines = 10;
+  } else if (mineValue >= maxMines) {
     gridSize = 12;
     numberOfMines = 10;
   }
-  else if(mineValue>= maxMines){
-    gridSize = 12;
-    numberOfMines = 10;
-  }
-userGrid.value="";
-  userMine.value="";
 
-  }
-
-setGridButton.addEventListener('click',setGrid())
-//reloads the page
-function reloadPage(){
-  location.reload();
-  
+  userGrid.value = "";
+  userMine.value = "";
 }
 
-//Creating Grid
-function createGrid(gridSize, numberOfMines){
-  const grid = [];
-  const minePositions = getMinePositions(gridSize,numberOfMines);
+setGridButton.addEventListener('click', setGrid());
 
-  for(let rows=0; rows<gridSize; rows++){
-    const row =[];
-    for(let cols=0; cols<gridSize; cols++){
+// Reload the page
+function reloadPage() {
+  location.reload();
+}
+
+
+// Create the grid with tiles and place mines randomly
+function createGrid(gridSize, numberOfMines) {
+  const grid = [];
+  const minePositions = getMinePositions(gridSize, numberOfMines);
+
+  for (let rows = 0; rows < gridSize; rows++) {
+    const row = [];
+    for (let cols = 0; cols < gridSize; cols++) {
       const individualTile = document.createElement('div');
       individualTile.dataset.status = tileStatus.hidden;
-      
+
       const tiles = {
         individualTile,
         cols,
         rows,
-        mine: minePositions.some(mineMatch.bind(null,{ rows,cols })),
+        mine: minePositions.some(mineMatch.bind(null, { rows, cols })),
 
-        //get and set methods to get the current status of tile that was clicked
-        get status(){
+        // Getter and setter to access the tile's current status easily
+        get status() {
           return individualTile.dataset.status;
         },
-        set status(value){
+        set status(value) {
           individualTile.dataset.status = value;
         }
-      }
+      };
 
-      row.push(tiles)
+      row.push(tiles);
     }
-    grid.push(row)
+    grid.push(row);
   }
   return grid;
 }
 
 
-//Mine Positioning
-function getMinePositions(gridSize,numberOfMines){
-  const locations = []; //locations of the mines in array x,y
+// Generate unique random mine positions
+function getMinePositions(gridSize, numberOfMines) {
+  const locations = []; // Array to store mine coordinates (row, col)
 
-  while(locations.length < numberOfMines){
+  while (locations.length < numberOfMines) {
+    const location = { // Random coordinates for a mine
+      rows: random(gridSize),
+      cols: random(gridSize)
+    };
 
-    const location = {  //random coordinates for the mine
-      rows:random(gridSize),
-      cols:random(gridSize)
-    }
-
-    if (!locations.some(mineMatch.bind(null,location))){
-      locations.push(location); //check if mine exists on same coordinate if not then push
+    // Only add location if it's not already taken
+    if (!locations.some(mineMatch.bind(null, location))) {
+      locations.push(location);
     }
   }
   return locations;
 }
 
-//utility funciton that makes random 
-function random(size){
-  return Math.floor(Math.random()*size)
+// Utility function to generate random integer in [0, size)
+function random(size) {
+  return Math.floor(Math.random() * size);
 }
 
-//utility function that matches coordinates
-function mineMatch(x,y){
-return x.rows === y.rows && x.cols === y.cols
+// Utility function to check if two tile coordinates match
+function mineMatch(x, y) {
+  return x.rows === y.rows && x.cols === y.cols;
 }
 
 
-//Flagging & Flag Counting functions
-//if tile is not marked and hidden mark it and if it is marked then unmark
-function flagged(tiles){
-  if (tiles.status !== tileStatus.hidden && tiles.status !==tileStatus.marked){
-    return
+// Flagging and flag count functions
+
+// Toggle flag on a tile if it's hidden or marked
+function flagged(tiles) {
+  if (tiles.status !== tileStatus.hidden && tiles.status !== tileStatus.marked) {
+    return;
   }
-  if (tiles.status === tileStatus.marked){
+  if (tiles.status === tileStatus.marked) {
     tiles.status = tileStatus.hidden;
     tiles.individualTile.textContent = '';
-  }
-  else {
+  } else {
     flagSound.playbackRate = 2;
     flagSound.play();
     tiles.status = tileStatus.marked;
@@ -144,161 +143,167 @@ function flagged(tiles){
   }
 }
 
-//decrements flagscount by 1 or increments by 1 depending on removal or addition
-function flagCount(){
-  const flaggedTiles = grid.reduce((count,row)=>{
-    return count + row.filter(tiles => tiles.status === tileStatus.marked).length
-  },0);
-  flagsLeftElement.textContent = numberOfMines-flaggedTiles;
+// Update the displayed count of flags remaining
+function flagCount() {
+  const flaggedTiles = grid.reduce((count, row) => {
+    return count + row.filter(tiles => tiles.status === tileStatus.marked).length;
+  }, 0);
+  flagsLeftElement.textContent = numberOfMines - flaggedTiles;
 }
 
 
-//Revealing tile and check surrounding tiles function
-function reveal(grid, tiles){
-  if(tiles.status !== tileStatus.hidden){
+// Reveal tile and recursively reveal neighbors if no adjacent mines
+function reveal(grid, tiles) {
+  if (tiles.status !== tileStatus.hidden) {
     return;
   }
-  if (tiles.mine){
-    tiles.status = tileStatus.mine;
-    tiles.individualTile.textContent = '💣'
-    return;
-  }
-  else
-  tiles.status = tileStatus.number;
-  tileSound.playbackRate=1.5;
-  tileSound.play();
-  const checkSurround = surroundingTiles(grid,tiles)
-  const mines = checkSurround.filter(t => t.mine)
 
-  //recursively expand empty tiles until finds a number tile
-  if (mines.length === 0){
-    checkSurround.forEach(reveal.bind(null,grid))
+  if (tiles.mine) {
+    tiles.status = tileStatus.mine;
+    tiles.individualTile.textContent = '💣';
+    return;
   }
-  else{
+
+  tiles.status = tileStatus.number;
+  tileSound.playbackRate = 1.5;
+  tileSound.play();
+
+  const surrounding = surroundingTiles(grid, tiles);
+  const mines = surrounding.filter(t => t.mine);
+
+  // Recursively reveal surrounding tiles if no adjacent mines
+  if (mines.length === 0) {
+    surrounding.forEach(reveal.bind(null, grid));
+  } else {
     tiles.individualTile.textContent = mines.length;
   }
 }
 
-function surroundingTiles(grid,{rows,cols}){
+// Get all adjacent tiles around a given tile
+function surroundingTiles(grid, { rows, cols }) {
   const surrounding = [];
-  for (let rowsOffset = -1; rowsOffset<=1; rowsOffset++){
-    for (let colsOffset = -1; colsOffset<=1; colsOffset++){
-      const tiles = grid [rows +rowsOffset]?.[cols +colsOffset]
-      if(tiles) surrounding.push(tiles)
+  for (let rowsOffset = -1; rowsOffset <= 1; rowsOffset++) {
+    for (let colsOffset = -1; colsOffset <= 1; colsOffset++) {
+      const tiles = grid[rows + rowsOffset]?.[cols + colsOffset];
+      if (tiles) surrounding.push(tiles);
     }
   }
   return surrounding;
 }
 
 
-//Win and Lose conditions and functions
-function checkWin(grid){
-return grid.every(row=>{
-  return row.every(tiles=>{
-    return tiles.status === tileStatus.number || (tiles.mine && (tiles.status===tileStatus.hidden || tiles.status === tileStatus.marked))
-  })
-})
+// Win and lose condition checks
+function checkWin(grid) {
+  return grid.every(row => {
+    return row.every(tiles => {
+      return (
+        tiles.status === tileStatus.number ||
+        (tiles.mine && (tiles.status === tileStatus.hidden || tiles.status === tileStatus.marked))
+      );
+    });
+  });
 }
 
-function checkLose(grid){
-return grid.some(row=>{
-  return row.some(tiles=>{
-    return tiles.status === tileStatus.mine;
-})
-})
+function checkLose(grid) {
+  return grid.some(row => {
+    return row.some(tiles => {
+      return tiles.status === tileStatus.mine;
+    });
+  });
 }
 
 
-
-
-
-function gameStatus(){
+// Handle game end status: win or lose
+function gameStatus() {
   const win = checkWin(grid);
   const lose = checkLose(grid);
 
-  if (win||lose){
+  if (win || lose) {
     startTimer();
     stopTimer();
-    gridElement.addEventListener('click', stopProp, {capture :true})
-    gridElement.addEventListener('contextmenu', stopProp, {capture :true})
+    gridElement.addEventListener('click', stopProp, { capture: true });
+    gridElement.addEventListener('contextmenu', stopProp, { capture: true });
   }
 
-  if (win){
+  if (win) {
     winSound.play();
-    flagTextElement.textContent = `You Win`
-    timer.textContent=`You won in ${timeTick}s`
+    flagTextElement.textContent = `You Win`;
+    timer.textContent = `You won in ${timeTick}s`;
   }
-   if (lose){
+
+  if (lose) {
     explodeSound.play();
-
     loseSound.play();
-    flagTextElement.textContent = 'Boom, You lose'
+    flagTextElement.textContent = 'Boom, You lose';
     timeTick = 0;
-    grid.forEach(row=>{
-      row.forEach(tiles=>{
-        if(tiles.status === tileStatus.marked)flagged(tiles);
-        if(tiles.mine) reveal(grid,tiles)
-      })
-    })
+
+    grid.forEach(row => {
+      row.forEach(tiles => {
+        if (tiles.status === tileStatus.marked) flagged(tiles);
+        if (tiles.mine) reveal(grid, tiles);
+      });
+    });
   }
 }
-//utility function to stop the game after the win or loss has happened
-function stopProp(e){
-  e.stopImmediatePropagation()
+
+// Utility function to prevent any further clicks after game ends
+function stopProp(e) {
+  e.stopImmediatePropagation();
 }
 
 
-//Rendering the grid
-const grid = createGrid(gridSize,numberOfMines);
-grid.forEach(row=>{
-  row.forEach(tiles=>{
+// Rendering the grid on the page and adding event listeners
+const grid = createGrid(gridSize, numberOfMines);
+
+grid.forEach(row => {
+  row.forEach(tiles => {
     gridElement.append(tiles.individualTile);
-    tiles.individualTile.addEventListener('click', ()=>{
+
+    tiles.individualTile.addEventListener('click', () => {
       reveal(grid, tiles);
       gameStatus();
       startTimer();
-    })
-    tiles.individualTile.addEventListener('contextmenu',e =>{
+    });
+
+    tiles.individualTile.addEventListener('contextmenu', e => {
       e.preventDefault();
       flagged(tiles);
       flagCount();
-    })
-  })
-})
+    });
+  });
+});
 
-gridElement.style.setProperty('--gs', gridSize)
+gridElement.style.setProperty('--gs', gridSize);
 flagsLeftElement.textContent = numberOfMines;
 console.log(grid);
 
-//Themes
-if(saveTheme){
-  selectTheme.value = saveTheme;  //checks if current value is equal to the savetheme value
-  document.body.setAttribute('data-theme',saveTheme)
+
+// Theme handling
+if (saveTheme) {
+  selectTheme.value = saveTheme;  // Set saved theme on load
+  document.body.setAttribute('data-theme', saveTheme);
+} else {
+  // Set theme to current selection if none saved
+  document.body.setAttribute('data-theme', selectTheme.value);
 }
-else{ //if it isnt it sets the current value
-  document.body.setAttribute('data-theme',selectTheme.value)
-}
 
-selectTheme.addEventListener('click',e=>{
-const selectedTheme = e.target.value; //adds event listener to check for which value is active 
-document.body.setAttribute('data-theme', selectedTheme);
-localStorage.setItem('selectedTheme',selectedTheme) //push active value to the local storage of saved theme
-})
+selectTheme.addEventListener('click', e => {
+  const selectedTheme = e.target.value; // Update theme based on user selection
+  document.body.setAttribute('data-theme', selectedTheme);
+  localStorage.setItem('selectedTheme', selectedTheme); // Save selection to local storage
+});
 
 
+// Timer functions
+function startTimer() {
+  if (timerInterval) return; // Prevent multiple timers from starting
 
-//Timer
-
-function startTimer(){
-  if(timerInterval) return // so that timer doesnt increment with each click
-  timerInterval = setInterval(()=>{ //timer interval that will increase by 1 every 1 second
+  timerInterval = setInterval(() => {
     timeTick++;
-    timer.textContent = `${String(timeTick).padStart(3, '0')}`; //formats time as 000
-  },1000)
+    timer.textContent = `${String(timeTick).padStart(3, '0')}`; // Format time as 000
+  }, 1000);
 }
 
-
-function stopTimer(){ //stops the timerinterval to whatever was the last value
-  clearInterval(timerInterval);
+function stopTimer() {
+  clearInterval(timerInterval); // Stop the timer
 }
-
